@@ -7,6 +7,9 @@
   } from "$lib/background-embed";
   import { contentTemplateMap } from "$lib/content-schema";
   import {
+    makeNicovideoEmbedURL,
+    makeSoundCloudEmbedURL,
+    makeYouTubeEmbedURL,
     parseAudioEmbedSoundCloud,
     parseVideoEmbedNicovideo,
     parseVideoEmbedYouTube,
@@ -32,33 +35,42 @@
       embedding = true;
       const url = new URL(contentUrl);
       switch (siteInfo.id) {
-        case 1601:
+        case 1601: {
           videoEmbedYouTube = true;
-          embedUrl = parseVideoEmbedYouTube(url) ?? "";
-          if (embedUrl)
+          const parsed = parseVideoEmbedYouTube(url);
+          if (parsed) {
+            embedUrl = makeYouTubeEmbedURL(parsed);
             embedYouTube({
               iframeParentDOM: document.querySelector(".middle-wrapper"),
               embedUrl,
               width,
               height,
             });
+          }
           break;
-        case 1602:
+        }
+        case 1602: {
           videoEmbedNicovideo = true;
-          embedUrl = parseVideoEmbedNicovideo(url) ?? "";
-          if (embedUrl)
+          const parsed = parseVideoEmbedNicovideo(url);
+          if (parsed) {
+            embedUrl = makeNicovideoEmbedURL(parsed);
             embedNicovideo({
               iframeDOM: document.querySelector("#musicfm-embed iframe"),
             });
+          }
           break;
-        case 3201:
+        }
+        case 3201: {
           audioEmbedSoundCloud = true;
-          embedUrl = parseAudioEmbedSoundCloud(url) ?? "";
-          if (embedUrl)
+          const parsed = parseAudioEmbedSoundCloud(url);
+          if (parsed) {
+            embedUrl = makeSoundCloudEmbedURL(parsed);
             embedSoundCloud({
               iframeDOM: document.querySelector("#musicfm-embed iframe"),
             });
+          }
           break;
+        }
       }
       if (!embedUrl) throw 114514;
     } catch (err) {

@@ -1,31 +1,3 @@
-export const parseImageEmbedImgur = (url: URL): string | null => {
-	const id = url.pathname.slice(1).split(".")[0];
-	if (id) {
-		return `https://i.imgur.com/${id}.png`;
-	}
-	return null;
-};
-export const parseImageEmbedNicoseiga = (url: URL): string | null => {
-	const id = url.pathname.match(/im([0-9]+)/)?.[1];
-	if (id) {
-		return `https://lohas.nicoseiga.jp//thumb/${id}i`;
-	}
-	return null;
-};
-export const parseImageEmbedPixiv = (url: URL): string | null => {
-	const id = url.pathname.match(/[0-9]+/)?.[0];
-	if (id) {
-		return `https://embed.pixiv.net/decorate.php?illust_id=${id}`;
-	}
-	return null;
-};
-export const parseGifEmbedImgur = (url: URL): string | null => {
-	const id = url.pathname.slice(1).split(".")[0];
-	if (id) {
-		return `https://i.imgur.com/${id}.gif`;
-	}
-	return null;
-};
 export const parseVideoEmbedYouTube = (url: URL): string | null => {
 	const path = url.pathname;
 	let id = "";
@@ -56,24 +28,26 @@ export const parseVideoEmbedYouTube = (url: URL): string | null => {
 	}
 	return null;
 };
+export const makeYouTubeEmbedURL = (id: string) =>
+	`https://www.youtube.com/embed/${id}`;
+export const makeYouTubeThumbnailURL = (id: string) =>
+	`https://www.youtube.com/embed/${id}`;
+
 export const parseVideoEmbedNicovideo = (url: URL): string | null => {
 	const id = url.pathname.match(/sm([0-9]+)/)?.[1];
 	if (id) {
-		return `https://embed.nicovideo.jp/watch/sm${id}?jsapi=1&amp;from=0`;
+		return id;
 	}
 	return null;
 };
-export const parseAudioEmbedSoundCloud = (url: URL): string | null => {
-	return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url.href)}&visual=true`;
-};
-export const parseAudioEmbedSpotify = (url: URL): string | null => {
-	const match = url.pathname.match(
-		/\/(track|album|playlist)\/([a-zA-Z0-9]{22})/,
-	);
-	if (match) {
-		const type = match[1];
-		const id = match[2];
-		return `https://open.spotify.com/embed/${type}/${id}?utm_source=generator`;
-	}
-	return null;
-};
+export const makeNicovideoEmbedURL = (id: string) =>
+	`https://embed.nicovideo.jp/watch/sm${id}?jsapi=1&amp;from=0`;
+export const makeNicovideoThumbnailURL = (id: string) =>
+	`https://nicovideo.cdn.nimg.jp/thumbnails/${id}/${id}`;
+
+export const parseAudioEmbedSoundCloud = (url: URL): string | null =>
+	encodeURIComponent(url.href);
+export const makeSoundCloudEmbedURL = (url: string) =>
+	`https://w.soundcloud.com/player/?url=${url}&visual=true`;
+export const makeSoundCloudThumbnailURL = (id: string) =>
+	"https://logo.clearbit.com/https://soundcloud.com"; // TODO

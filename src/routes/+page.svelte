@@ -1,5 +1,6 @@
 <script lang="ts">
     import EmbedPart from "$lib/components/EmbedPart.svelte";
+    import ListPart from "$lib/components/ListPart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
     import { PauseIcon, PlayIcon } from "@lucide/svelte";
     import * as v from "valibot";
@@ -100,17 +101,14 @@
     <!-- プレイリスト表示 -->
     <ul class="space-y-2">
         {#each urls as url, i}
-            <li
-                class="flex justify-between items-center px-4 py-2 bg-zinc-800 rounded-md hover:bg-zinc-700 transition"
-            >
-                <span class="truncate text-sm">{url}</span>
-                <button
-                    onclick={() => play(i)}
-                    class="p-2 bg-blue-500 hover:bg-blue-400 text-white rounded-md"
-                >
-                    <PlayIcon class="w-4 h-4" />
-                </button>
-            </li>
+            <ListPart
+                contentUrl={url}
+                contentType={urlsType[i]}
+                isActive={i === currentIndex}
+                onclick={() => {
+                    () => play(i);
+                }}
+            />
         {/each}
     </ul>
 </div>
