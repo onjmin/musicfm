@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { activeController } from "$lib/background-embed";
     import EmbedPart from "$lib/components/EmbedPart.svelte";
     import ListPart from "$lib/components/ListPart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
@@ -39,6 +40,11 @@
 
     const togglePlayback = () => {
         isPlaying = !isPlaying;
+        if (isPlaying) {
+            activeController?.play();
+        } else {
+            activeController?.pause();
+        }
     };
 </script>
 
