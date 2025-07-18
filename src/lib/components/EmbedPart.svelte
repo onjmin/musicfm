@@ -82,8 +82,6 @@
   $effect(() => {
     if (siteInfo) {
       tryEmbed(siteInfo);
-      console.log(siteInfo);
-      console.log(embedding);
       if (!embedding) return;
     }
     return () => {
