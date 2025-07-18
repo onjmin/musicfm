@@ -156,6 +156,8 @@ export const embedYouTube = ({
 		handleUserAction(() => youTubeController.play());
 	}
 };
+
+let g_cachedKey = "";
 export const embedNicovideo = ({
 	cachedKey,
 	iframeDOM,
@@ -165,33 +167,37 @@ export const embedNicovideo = ({
 }) => {
 	if (!iframeDOM) return;
 	activeController = nicovideoController;
+	g_cachedKey = cachedKey;
 	nicovideoController.target = iframeDOM;
-	const handle = (e: MessageEvent) => {
-		if (e.origin !== nicovideoController.origin) return;
-		const { data } = e.data;
-		switch (e.data.eventName) {
-			case "playerStatusChange": {
-				switch (data.playerStatus) {
-					case 4:
-						g_callback();
-						break;
-				}
-				break;
-			}
-			case "loadComplete": {
-				nicovideoController.play();
-				const thumbnail = data.videoInfo.thumbnailUrl;
-				const title = data.videoInfo.title;
-				const author = null;
-				saveCache(cachedKey, thumbnail, title, author);
-				break;
-			}
-		}
-	};
-	window.removeEventListener("message", handle);
-	window.addEventListener("message", handle);
 	handleUserAction(() => nicovideoController.play());
 };
+const handle = (e: MessageEvent) => {
+	if (e.origin !== nicovideoController.origin) return;
+	const { data } = e.data;
+	switch (e.data.eventName) {
+		case "playerStatusChange": {
+			switch (data.playerStatus) {
+				case 4:
+					g_callback();
+					break;
+			}
+			break;
+		}
+		case "loadComplete": {
+			nicovideoController.play();
+			const thumbnail = data.videoInfo.thumbnailUrl;
+			const title = data.videoInfo.title;
+			const author = null;
+			const videoId = data.videoInfo.videoId.slice(2);
+			if (videoId === `Nicovideo###${g_cachedKey}`) {
+				saveCache(g_cachedKey, thumbnail, title, author);
+			}
+			break;
+		}
+	}
+};
+window.addEventListener("message", handle);
+
 declare global {
 	var SC: any;
 }
