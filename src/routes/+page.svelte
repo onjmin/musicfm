@@ -1,88 +1,89 @@
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>おぉんがくぷれぃやああ</title>
-        <style>
-            body {
-                margin: 0;
-                height: 100vh;
-                background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
-                color: white;
-                font-family: "Segoe UI", sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                overflow: hidden;
+<script lang="ts">
+    import { PauseIcon, PlayIcon, PlusIcon } from "@lucide/svelte";
+
+    let url = "";
+    let isPlaying = false;
+    let currentAudio: HTMLAudioElement | null = null;
+
+    let playlist: string[] = [];
+
+    function addToPlaylist() {
+        if (url.trim()) {
+            playlist.push(url.trim());
+            url = "";
+        }
+    }
+
+    function playAudio(src: string) {
+        if (currentAudio) {
+            currentAudio.pause();
+        }
+        currentAudio = new Audio(src);
+        currentAudio.play();
+        isPlaying = true;
+        currentAudio.onended = () => {
+            isPlaying = false;
+        };
+    }
+
+    function togglePlayback() {
+        if (currentAudio) {
+            if (currentAudio.paused) {
+                currentAudio.play();
+                isPlaying = true;
+            } else {
+                currentAudio.pause();
+                isPlaying = false;
             }
+        }
+    }
+</script>
 
-            h1 {
-                font-size: 3rem;
-                margin-bottom: 40px;
-                text-shadow: 0 0 20px #00ffff88;
-                animation: glow 2s infinite alternate;
-            }
+<div class="max-w-2xl mx-auto p-6 space-y-6">
+    <h1 class="text-3xl font-bold text-center">🎵 おぉんがくぷれぃやああ</h1>
 
-            @keyframes glow {
-                from {
-                    text-shadow: 0 0 10px #00ffff44;
-                }
-                to {
-                    text-shadow:
-                        0 0 40px #00ffff,
-                        0 0 60px #00ffff88;
-                }
-            }
+    <!-- URL入力 + 追加ボタン -->
+    <div class="flex gap-2">
+        <input
+            class="flex-1"
+            placeholder="音楽のURLを入力..."
+            bind:value={url}
+        />
+        <button onclick={addToPlaylist} title="追加">
+            <PlusIcon class="w-5 h-5" />
+        </button>
+    </div>
 
-            button {
-                font-size: 5rem;
-                padding: 1em 2em;
-                border: none;
-                border-radius: 50%;
-                background: radial-gradient(circle at center, #00ffcc, #006666);
-                color: black;
-                font-weight: bold;
-                cursor: pointer;
-                box-shadow:
-                    0 0 30px #00ffccaa,
-                    0 0 60px #00ffcc66;
-                transition:
-                    transform 0.2s ease,
-                    box-shadow 0.2s ease;
-            }
+    <!-- 再生・一時停止コントロール -->
+    {#if currentAudio}
+        <div class="flex justify-center">
+            <button
+                onclick={togglePlayback}
+                class="text-3xl px-6 py-4 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transition transform hover:scale-105"
+            >
+                {#if isPlaying}
+                    <PauseIcon class="w-6 h-6" />
+                {:else}
+                    <PlayIcon class="w-6 h-6" />
+                {/if}
+            </button>
+        </div>
+    {/if}
 
-            button:hover {
-                transform: scale(1.1);
-                box-shadow:
-                    0 0 40px #00ffcc,
-                    0 0 80px #00ffcc88;
-            }
-
-            audio {
-                display: none;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>おぉんがくぷれぃやああ</h1>
-        <button id="playBtn">▶</button>
-        <audio id="player" src="your-music.mp3"></audio>
-
-        <script>
-            const btn = document.getElementById("playBtn");
-            const audio = document.getElementById("player");
-
-            btn.addEventListener("click", () => {
-                if (audio.paused) {
-                    audio.play();
-                    btn.textContent = "⏸";
-                } else {
-                    audio.pause();
-                    btn.textContent = "▶";
-                }
-            });
-        </script>
-    </body>
-</html>
+    <!-- プレイリスト表示 -->
+    <ul class="space-y-2">
+        {#each playlist as track, i}
+            <li
+                class="flex justify-between items-center bg-zinc-800 p-3 rounded-lg"
+            >
+                <span class="truncate text-sm">{track}</span>
+                <button
+                    onclick={() => playAudio(track)}
+                    class="px-3 py-1 text-sm text-white bg-zinc-700 hover:bg-zinc-600 rounded-md shadow"
+                >
+                    <PlayIcon class="w-4 h-4" />
+                </button>
+            </li>
+        {/each}
+    </ul>
+</div>
