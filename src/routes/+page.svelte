@@ -1,27 +1,39 @@
 <script lang="ts">
+    import EmbedPart from "$lib/components/EmbedPart.svelte";
+    import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
     import { PauseIcon, PlayIcon } from "@lucide/svelte";
+    import * as v from "valibot";
 
     let rawUrls = $state("");
     let urls: string[] = $state([]);
+    let urlsType: number[] = $state([]);
     let isPlaying = $state(false);
     let currentIndex = $state(0);
-    let currentUrl = $state("");
 
     function loadUrls() {
-        const lines = rawUrls
-            .split("\n")
-            .map((line) => line.trim())
-            .filter(Boolean);
+        const lines = rawUrls.split("\n").flatMap((line) => {
+            try {
+                const videoUrl = v.safeParse(VIDEO_URL, line);
+                if (videoUrl.success) {
+                    urlsType.push(Enum.Video);
+                    return [videoUrl.output];
+                }
+                const audioUrl = v.safeParse(AUDIO_URL, line);
+                if (audioUrl.success) {
+                    urlsType.push(Enum.Audio);
+                    return [audioUrl.output];
+                }
+            } catch (err) {}
+            return [];
+        });
         urls = lines;
         isPlaying = true;
         currentIndex = 0;
-        currentUrl = urls[currentIndex];
     }
 
     const play = (index: number) => {
         isPlaying = true;
         currentIndex = index;
-        currentUrl = urls[currentIndex];
     };
 
     const togglePlayback = () => {
@@ -51,14 +63,16 @@
     <hr class="border-zinc-700" />
 
     <!-- iframe動画エリア -->
-    <div class="w-full h-64 bg-black rounded-md overflow-hidden">
-        {#if currentUrl}
-            <iframe
-                src={currentUrl}
-                class="w-full h-full"
-                allow="autoplay"
-                frameborder="0"
-            ></iframe>
+    <div
+        class="w-full max-w-2xl mx-auto bg-black rounded-md overflow-hidden aspect-video"
+    >
+        {#if urls.length}
+            {#key currentIndex}
+                <EmbedPart
+                    contentUrl={urls[currentIndex]}
+                    contentType={urlsType[currentIndex]}
+                />
+            {/key}
         {:else}
             <div class="flex items-center justify-center h-full text-zinc-400">
                 ここに動画が表示されます
