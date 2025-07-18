@@ -131,6 +131,7 @@
                 <ListPart
                     contentUrl={url}
                     contentType={urlsType[i]}
+                    index={i}
                     isActive={i === currentIndex}
                     onclick={() => play(i)}
                 />
