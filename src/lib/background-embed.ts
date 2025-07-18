@@ -169,6 +169,8 @@ export const embedNicovideo = ({
 	activeController = nicovideoController;
 	g_cachedKey = cachedKey;
 	nicovideoController.target = iframeDOM;
+	window.removeEventListener("message", handle);
+	window.addEventListener("message", handle);
 	handleUserAction(() => nicovideoController.play());
 };
 const handle = (e: MessageEvent) => {
@@ -196,7 +198,6 @@ const handle = (e: MessageEvent) => {
 		}
 	}
 };
-window.addEventListener("message", handle);
 
 declare global {
 	var SC: any;
