@@ -48,7 +48,7 @@
         }
     };
     $effect(() => {
-        loadUrls();
+        setTimeout(() => loadUrls());
     });
 </script>
 
