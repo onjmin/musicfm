@@ -105,9 +105,7 @@
                 contentUrl={url}
                 contentType={urlsType[i]}
                 isActive={i === currentIndex}
-                onclick={() => {
-                    () => play(i);
-                }}
+                onclick={() => play(i)}
             />
         {/each}
     </ul>

@@ -24,14 +24,14 @@ export const parseVideoEmbedYouTube = (url: URL): string | null => {
 	}
 	// 動画 ID が抽出できた場合、埋め込み URL を返す
 	if (id) {
-		return `https://www.youtube.com/embed/${id}`;
+		return id;
 	}
 	return null;
 };
 export const makeYouTubeEmbedURL = (id: string) =>
 	`https://www.youtube.com/embed/${id}`;
 export const makeYouTubeThumbnailURL = (id: string) =>
-	`https://www.youtube.com/embed/${id}`;
+	`https://i.ytimg.com/vi/${id}/default.jpg`;
 
 export const parseVideoEmbedNicovideo = (url: URL): string | null => {
 	const id = url.pathname.match(/sm([0-9]+)/)?.[1];
@@ -43,7 +43,7 @@ export const parseVideoEmbedNicovideo = (url: URL): string | null => {
 export const makeNicovideoEmbedURL = (id: string) =>
 	`https://embed.nicovideo.jp/watch/sm${id}?jsapi=1&amp;from=0`;
 export const makeNicovideoThumbnailURL = (id: string) =>
-	`https://nicovideo.cdn.nimg.jp/thumbnails/${id}/${id}`;
+	`https://nicovideo.cdn.nimg.jp/thumbnails/${id}/${id}`; // TODO
 
 export const parseAudioEmbedSoundCloud = (url: URL): string | null =>
 	encodeURIComponent(url.href);
