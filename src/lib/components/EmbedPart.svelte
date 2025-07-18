@@ -41,6 +41,7 @@
           if (parsed) {
             embedUrl = makeYouTubeEmbedURL(parsed);
             embedYouTube({
+              cachedKey: `YouTube###${parsed}`,
               iframeParentDOM: document.querySelector(".middle-wrapper"),
               embedUrl,
               width,
@@ -55,6 +56,7 @@
           if (parsed) {
             embedUrl = makeNicovideoEmbedURL(parsed);
             embedNicovideo({
+              cachedKey: `Nicovideo###${parsed}`,
               iframeDOM: document.querySelector("#musicfm-embed iframe"),
             });
           }
@@ -66,6 +68,7 @@
           if (parsed) {
             embedUrl = makeSoundCloudEmbedURL(parsed);
             embedSoundCloud({
+              cachedKey: `SoundCloud###${parsed}`,
               iframeDOM: document.querySelector("#musicfm-embed iframe"),
             });
           }

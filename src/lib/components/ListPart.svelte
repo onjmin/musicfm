@@ -9,7 +9,6 @@
         parseVideoEmbedYouTube,
     } from "$lib/embed";
     import { SiteInfo, findIn } from "$lib/whitelist/site-info";
-    import { PlayIcon } from "@lucide/svelte";
 
     let {
         contentUrl = "",
@@ -27,7 +26,9 @@
 
     let embedding = $state(false);
     let embedError = $state(false);
-    let embedUrl = $state("");
+    let thumbnail = $state("");
+    let title = $state("");
+    let author = $state("");
     let videoEmbedYouTube = $state(false);
     let videoEmbedNicovideo = $state(false);
     let audioEmbedSoundCloud = $state(false);
@@ -40,7 +41,21 @@
                     videoEmbedYouTube = true;
                     const parsed = parseVideoEmbedYouTube(url);
                     if (parsed) {
-                        embedUrl = makeYouTubeThumbnailURL(parsed);
+                        const cache =
+                            localStorage.getItem(
+                                `YouTube###${parsed}###thumbnail`,
+                            ) ?? "";
+                        thumbnail = cache
+                            ? cache
+                            : makeYouTubeThumbnailURL(parsed);
+                        title =
+                            localStorage.getItem(
+                                `YouTube###${parsed}###title`,
+                            ) ?? "";
+                        author =
+                            localStorage.getItem(
+                                `YouTube###${parsed}###author`,
+                            ) ?? "";
                     }
                     break;
                 }
@@ -48,7 +63,21 @@
                     videoEmbedNicovideo = true;
                     const parsed = parseVideoEmbedNicovideo(url);
                     if (parsed) {
-                        embedUrl = makeNicovideoThumbnailURL(parsed);
+                        const cache =
+                            localStorage.getItem(
+                                `Nicovideo###${parsed}###thumbnail`,
+                            ) ?? "";
+                        thumbnail = cache
+                            ? cache
+                            : makeNicovideoThumbnailURL(parsed);
+                        title =
+                            localStorage.getItem(
+                                `Nicovideo###${parsed}###title`,
+                            ) ?? "";
+                        author =
+                            localStorage.getItem(
+                                `Nicovideo###${parsed}###author`,
+                            ) ?? "";
                     }
                     break;
                 }
@@ -56,12 +85,26 @@
                     audioEmbedSoundCloud = true;
                     const parsed = parseAudioEmbedSoundCloud(url);
                     if (parsed) {
-                        embedUrl = makeSoundCloudThumbnailURL(parsed);
+                        const cache =
+                            localStorage.getItem(
+                                `SoundCloud###${parsed}###thumbnail`,
+                            ) ?? "";
+                        thumbnail = cache
+                            ? cache
+                            : makeSoundCloudThumbnailURL(parsed);
+                        title =
+                            localStorage.getItem(
+                                `SoundCloud###${parsed}###title`,
+                            ) ?? "";
+                        author =
+                            localStorage.getItem(
+                                `SoundCloud###${parsed}###author`,
+                            ) ?? "";
                     }
                     break;
                 }
             }
-            if (!embedUrl) throw 114514;
+            if (!thumbnail) throw 114514;
         } catch (err) {
             embedError = true;
             embedding = false;
@@ -102,18 +145,18 @@
         {index + 1}
     </span>
 
-    <!-- 埋め込み画像 -->
+    <!-- サムネ画像 -->
     <img
-        src={embedUrl}
+        src={thumbnail}
         alt=""
         aria-hidden="true"
         class="pointer-events-none absolute right-2 -top-10 h-40 w-auto opacity-30 select-none object-contain"
     />
 
     <!-- 本体 -->
-    <div class="relative z-20 flex items-center gap-2 pointer-events-none">
-        <div class="flex justify-between items-center flex-1 gap-2">
-            <span class="truncate text-sm">{contentUrl}</span>
-        </div>
+    <div class="relative z-20 flex flex-col justify-center pointer-events-none">
+        <span class="text-xs text-zinc-500 truncate">{contentUrl}</span>
+        <span class="text-base font-semibold truncate">{title}</span>
+        <span class="text-sm text-zinc-400 truncate">{author}</span>
     </div>
 </li>

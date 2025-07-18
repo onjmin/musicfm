@@ -1,3 +1,14 @@
+const saveCache = (
+	cachedKey: string,
+	thumbnail: string | null,
+	title: string | null,
+	author: string | null,
+) => {
+	if (thumbnail) localStorage.setItem(`${cachedKey}###thumbnail`, thumbnail);
+	if (title) localStorage.setItem(`${cachedKey}###title`, title);
+	if (author) localStorage.setItem(`${cachedKey}###author`, author);
+};
+
 let userActionDone = false;
 
 /**
@@ -95,11 +106,13 @@ declare global {
 	var onYouTubeIframeAPIReady: () => void;
 }
 export const embedYouTube = ({
+	cachedKey,
 	iframeParentDOM,
 	embedUrl,
 	width,
 	height,
 }: {
+	cachedKey: string;
 	iframeParentDOM: Element | null;
 	embedUrl: string;
 	width: number;
@@ -121,11 +134,10 @@ export const embedYouTube = ({
 					youTubeController.target = event.target;
 					youTubeController.play();
 					const data = event.target.getVideoData();
+					const thumbnail = null;
 					const title = data.title;
 					const author = data.author;
-					const thumbnail = null;
-					console.log({ title, author, thumbnail });
-					console.log(data);
+					saveCache(cachedKey, thumbnail, title, author);
 				},
 				onError: console.error,
 				onStateChange: (event: any) => {
@@ -145,8 +157,12 @@ export const embedYouTube = ({
 	}
 };
 export const embedNicovideo = ({
+	cachedKey,
 	iframeDOM,
-}: { iframeDOM: HTMLIFrameElement | null }) => {
+}: {
+	cachedKey: string;
+	iframeDOM: HTMLIFrameElement | null;
+}) => {
 	if (!iframeDOM) return;
 	activeController = nicovideoController;
 	nicovideoController.target = iframeDOM;
@@ -164,11 +180,10 @@ export const embedNicovideo = ({
 			}
 			case "loadComplete": {
 				nicovideoController.play();
+				const thumbnail = data.videoInfo.thumbnailUrl;
 				const title = data.videoInfo.title;
 				const author = null;
-				const thumbnail = data.videoInfo.thumbnailUrl;
-				console.log({ title, author, thumbnail });
-				console.log(data.videoInfo);
+				saveCache(cachedKey, thumbnail, title, author);
 				break;
 			}
 		}
@@ -181,8 +196,12 @@ declare global {
 	var SC: any;
 }
 export const embedSoundCloud = ({
+	cachedKey,
 	iframeDOM,
-}: { iframeDOM: HTMLIFrameElement | null }) => {
+}: {
+	cachedKey: string;
+	iframeDOM: HTMLIFrameElement | null;
+}) => {
 	if (!iframeDOM) return;
 	activeController = soundCloudController;
 	const ready = () => {
@@ -190,10 +209,10 @@ export const embedSoundCloud = ({
 		soundCloudController.target?.bind(window.SC.Widget.Events.READY, () => {
 			soundCloudController.play();
 			soundCloudController.target.getCurrentSound((res: any) => {
+				const thumbnail = res.artwork_url || res.user.avatar_url;
 				const title = res.title;
 				const author = res.user.username;
-				const thumbnail = res.artwork_url || res.user.avatar_url;
-				console.log({ title, author, thumbnail });
+				saveCache(cachedKey, thumbnail, title, author);
 			});
 		});
 		soundCloudController.target?.bind(window.SC.Widget.Events.FINISH, () =>
