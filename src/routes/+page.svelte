@@ -12,8 +12,10 @@
     let urlsType: number[] = $state([]);
     let isPlaying = $state(false);
     let currentIndex = $state(0);
+    let initTimestamp = $state(0);
 
     const loadUrls = () => {
+        urlsType = [];
         const lines = rawUrls.split("\n").flatMap((line) => {
             try {
                 const videoUrl = v.safeParse(VIDEO_URL, line);
@@ -32,6 +34,7 @@
         urls = lines;
         isPlaying = true;
         currentIndex = 0;
+        initTimestamp = performance.now();
     };
 
     const play = (index: number) => {
@@ -88,18 +91,20 @@
     <div
         class="w-full max-w-2xl mx-auto bg-black rounded-md overflow-hidden aspect-video"
     >
-        {#if urls.length}
-            {#key currentIndex}
+        {#key initTimestamp || currentIndex}
+            {#if urls.length}
                 <EmbedPart
                     contentUrl={urls[currentIndex]}
                     contentType={urlsType[currentIndex]}
                 />
-            {/key}
-        {:else}
-            <div class="flex items-center justify-center h-full text-zinc-400">
-                ここに動画が表示されます
-            </div>
-        {/if}
+            {:else}
+                <div
+                    class="flex items-center justify-center h-full text-zinc-400"
+                >
+                    ここに動画が表示されます
+                </div>
+            {/if}
+        {/key}
     </div>
 
     <!-- コントロールバー -->
@@ -121,13 +126,15 @@
 
     <!-- プレイリスト表示 -->
     <ul class="space-y-2 max-h-96 overflow-y-auto pr-1">
-        {#each urls as url, i}
-            <ListPart
-                contentUrl={url}
-                contentType={urlsType[i]}
-                isActive={i === currentIndex}
-                onclick={() => play(i)}
-            />
-        {/each}
+        {#key initTimestamp}
+            {#each urls as url, i}
+                <ListPart
+                    contentUrl={url}
+                    contentType={urlsType[i]}
+                    isActive={i === currentIndex}
+                    onclick={() => play(i)}
+                />
+            {/each}
+        {/key}
     </ul>
 </div>
