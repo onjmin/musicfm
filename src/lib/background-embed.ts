@@ -68,7 +68,7 @@ const nicovideoController = new (class implements NicovideoController {
 const soundCloudController = new (class implements Controller {
 	target: any | null = null;
 	play() {
-		this.target?.setVolume(64);
+		this.target?.setVolume(32);
 		this.target?.play();
 	}
 	pause() {
