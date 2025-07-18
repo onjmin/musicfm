@@ -120,6 +120,12 @@ export const embedYouTube = ({
 				onReady: (event: any) => {
 					youTubeController.target = event.target;
 					youTubeController.play();
+					const data = event.target.getVideoData();
+					const title = data.title;
+					const author = data.author;
+					const thumbnail = null;
+					console.log({ title, author, thumbnail });
+					console.log(data);
 				},
 				onError: console.error,
 				onStateChange: (event: any) => {
@@ -158,6 +164,11 @@ export const embedNicovideo = ({
 			}
 			case "loadComplete": {
 				nicovideoController.play();
+				const title = data.videoInfo.title;
+				const author = null;
+				const thumbnail = data.videoInfo.thumbnailUrl;
+				console.log({ title, author, thumbnail });
+				console.log(data.videoInfo);
 				break;
 			}
 		}
@@ -176,9 +187,15 @@ export const embedSoundCloud = ({
 	activeController = soundCloudController;
 	const ready = () => {
 		soundCloudController.target = window.SC.Widget(iframeDOM);
-		soundCloudController.target?.bind(window.SC.Widget.Events.READY, () =>
-			soundCloudController.play(),
-		);
+		soundCloudController.target?.bind(window.SC.Widget.Events.READY, () => {
+			soundCloudController.play();
+			soundCloudController.target.getCurrentSound((res: any) => {
+				const title = res.title;
+				const author = res.user.username;
+				const thumbnail = res.artwork_url || res.user.avatar_url;
+				console.log({ title, author, thumbnail });
+			});
+		});
 		soundCloudController.target?.bind(window.SC.Widget.Events.FINISH, () =>
 			g_callback(),
 		);
