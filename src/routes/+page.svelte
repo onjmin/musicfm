@@ -13,7 +13,7 @@
     let isPlaying = $state(false);
     let currentIndex = $state(0);
 
-    function loadUrls() {
+    const loadUrls = () => {
         const lines = rawUrls.split("\n").flatMap((line) => {
             try {
                 const videoUrl = v.safeParse(VIDEO_URL, line);
@@ -32,7 +32,7 @@
         urls = lines;
         isPlaying = true;
         currentIndex = 0;
-    }
+    };
 
     const play = (index: number) => {
         isPlaying = true;
@@ -48,7 +48,9 @@
         }
     };
     $effect(() => {
-        setTimeout(() => loadUrls());
+        setTimeout(() => {
+            loadUrls();
+        });
     });
 </script>
 
@@ -118,7 +120,7 @@
     </div>
 
     <!-- プレイリスト表示 -->
-    <ul class="space-y-2">
+    <ul class="space-y-2 max-h-96 overflow-y-auto pr-1">
         {#each urls as url, i}
             <ListPart
                 contentUrl={url}
