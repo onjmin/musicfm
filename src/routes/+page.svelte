@@ -3,10 +3,11 @@
     import EmbedPart from "$lib/components/EmbedPart.svelte";
     import ListPart from "$lib/components/ListPart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
+    import { exampleUrls } from "$lib/example-urls";
     import { PauseIcon, PlayIcon } from "@lucide/svelte";
     import * as v from "valibot";
 
-    let rawUrls = $state("");
+    let rawUrls = $state(exampleUrls);
     let urls: string[] = $state([]);
     let urlsType: number[] = $state([]);
     let isPlaying = $state(false);
