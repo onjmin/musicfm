@@ -1,21 +1,57 @@
 <script lang="ts">
-    import { activeController } from "$lib/background-embed";
+    import { activeController, onEnded } from "$lib/background-embed";
     import EmbedPart from "$lib/components/EmbedPart.svelte";
     import ListPart from "$lib/components/ListPart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
     import { exampleUrls } from "$lib/example-urls";
-    import { PauseIcon, PlayIcon } from "@lucide/svelte";
+    import {
+        ChevronLeftIcon,
+        ChevronRightIcon,
+        PauseIcon,
+        PlayIcon,
+        RepeatIcon,
+        ShuffleIcon,
+        SkipBackIcon,
+    } from "@lucide/svelte";
+    import { Switch } from "@skeletonlabs/skeleton-svelte";
     import * as v from "valibot";
 
     let rawUrls = $state(exampleUrls);
     let urls: string[] = $state([]);
     let urlsType: number[] = $state([]);
-    let isPlaying = $state(false);
     let currentIndex = $state(0);
     let initTimestamp = $state(0);
+    let history: number[];
+    let lottery = new Set<number>();
+
+    let isRepeat = $state(false);
+    let isShuffle = $state(false);
+
+    const next = () => {
+        if (isShuffle) {
+            if (!lottery.size) {
+                lottery = new Set(urls.keys());
+            }
+            currentIndex = [...lottery][(lottery.size * Math.random()) | 0];
+        } else {
+            currentIndex = ++currentIndex % urls.length;
+        }
+        history.push(currentIndex);
+        lottery.delete(currentIndex);
+    };
+
+    onEnded(() => {
+        if (isRepeat) {
+            activeController?.seekTo0();
+            activeController?.play();
+        } else {
+            next();
+        }
+    });
 
     const loadUrls = () => {
         urlsType = [];
+        history = [];
         const lines = rawUrls.split("\n").flatMap((line) => {
             try {
                 const videoUrl = v.safeParse(VIDEO_URL, line);
@@ -32,24 +68,16 @@
             return [];
         });
         urls = lines;
-        isPlaying = true;
-        currentIndex = 0;
+        lottery = new Set(urls.keys());
+        play(0);
         initTimestamp = performance.now();
     };
 
     const play = (index: number) => {
-        isPlaying = true;
         currentIndex = index;
+        lottery.delete(index);
     };
 
-    const togglePlayback = () => {
-        isPlaying = !isPlaying;
-        if (isPlaying) {
-            activeController?.play();
-        } else {
-            activeController?.pause();
-        }
-    };
     $effect(() => {
         setTimeout(() => {
             loadUrls();
@@ -80,20 +108,76 @@
     </div>
 
     <!-- コントロールバー -->
-    <div class="flex items-center justify-center gap-4">
-        <button
-            onclick={togglePlayback}
-            class="rounded-full bg-green-600 hover:bg-green-500 text-white p-3"
-        >
-            {#if isPlaying}
-                <PauseIcon class="w-6 h-6" />
-            {:else}
+    <div
+        class="flex flex-row flex-wrap items-center justify-center gap-4 w-full h-full"
+    >
+        <div class="flex items-center gap-2">
+            <span class="text-sm text-zinc-300">
+                {currentIndex + 1} / {urls.length}
+            </span>
+            <button
+                onclick={() => {
+                    const prev = history.pop();
+                    if (prev !== undefined) currentIndex = prev;
+                }}
+                class="p-2 bg-zinc-700 text-white rounded hover:bg-zinc-600"
+                aria-label="前へ"
+            >
+                <ChevronLeftIcon class="w-5 h-5" />
+            </button>
+            <button
+                onclick={() => next()}
+                class="p-2 bg-zinc-700 text-white rounded hover:bg-zinc-600"
+                aria-label="次へ"
+            >
+                <ChevronRightIcon class="w-5 h-5" />
+            </button>
+        </div>
+
+        <!-- リピート / シャッフル -->
+        <div class="flex items-center gap-4">
+            <Switch
+                checked={isRepeat}
+                onCheckedChange={(e) => (isRepeat = e.checked)}
+                controlActive="bg-blue-500"
+            >
+                {#snippet inactiveChild()}<RepeatIcon size="16" />{/snippet}
+                {#snippet activeChild()}<RepeatIcon size="16" />{/snippet}
+            </Switch>
+
+            <Switch
+                checked={isShuffle}
+                onCheckedChange={(e) => (isShuffle = e.checked)}
+                controlActive="bg-purple-500"
+            >
+                {#snippet inactiveChild()}<ShuffleIcon size="16" />{/snippet}
+                {#snippet activeChild()}<ShuffleIcon size="16" />{/snippet}
+            </Switch>
+        </div>
+
+        <!-- 再生・停止・最初から -->
+        <div class="flex items-center gap-4">
+            <button
+                onclick={() => activeController?.play()}
+                class="rounded-full bg-green-600 hover:bg-green-500 text-white p-3"
+            >
                 <PlayIcon class="w-6 h-6" />
-            {/if}
-        </button>
-        <span class="text-sm text-zinc-300">
-            {currentIndex + 1} / {urls.length}
-        </span>
+            </button>
+
+            <button
+                onclick={() => activeController?.pause()}
+                class="rounded bg-red-600 hover:bg-red-500 text-white px-4 py-2"
+            >
+                <PauseIcon class="w-6 h-6" />
+            </button>
+
+            <button
+                onclick={() => activeController?.seekTo0()}
+                class="rounded bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2"
+            >
+                <SkipBackIcon class="w-6 h-6" />
+            </button>
+        </div>
     </div>
 
     <!-- プレイリスト表示 -->

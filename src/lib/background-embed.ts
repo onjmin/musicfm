@@ -19,11 +19,16 @@ export let activeController: Controller | null = null;
 export const clearActiveController = () => {
 	activeController = null;
 };
+let g_callback = () => {};
+export const onEnded = (callback: () => void) => {
+	g_callback = callback;
+};
 
 type Controller = {
 	target: any | null;
 	play(): void;
 	pause(): void;
+	seekTo0(): void;
 };
 type NicovideoController = Controller & {
 	origin: string;
@@ -39,6 +44,9 @@ const youTubeController = new (class implements Controller {
 	pause() {
 		this.target?.pauseVideo();
 	}
+	seekTo0() {
+		this.target?.seekTo(0);
+	}
 })();
 const nicovideoController = new (class implements NicovideoController {
 	target: HTMLIFrameElement | null = null;
@@ -52,6 +60,9 @@ const nicovideoController = new (class implements NicovideoController {
 	}
 	pause() {
 		this.post({ eventName: "pause" });
+	}
+	seekTo0() {
+		this.post({ eventName: "seek", data: { time: 0 } });
 	}
 	post(data: object) {
 		this.target?.contentWindow?.postMessage(
@@ -73,6 +84,9 @@ const soundCloudController = new (class implements Controller {
 	}
 	pause() {
 		this.target?.pause();
+	}
+	seekTo0() {
+		this.target?.seekTo(0);
 	}
 })();
 
@@ -100,8 +114,7 @@ export const embedYouTube = ({
 			height,
 			videoId,
 			playerVars: {
-				loop: 1,
-				playlist: videoId,
+				playsinline: 1,
 			},
 			events: {
 				onReady: (event: any) => {
@@ -109,6 +122,13 @@ export const embedYouTube = ({
 					youTubeController.play();
 				},
 				onError: console.error,
+				onStateChange: (event: any) => {
+					switch (event.target.getPlayerState?.()) {
+						case YT.PlayerState.ENDED:
+							g_callback();
+							break;
+					}
+				},
 			},
 		});
 	};
@@ -131,7 +151,7 @@ export const embedNicovideo = ({
 			case "playerStatusChange": {
 				switch (data.playerStatus) {
 					case 4:
-						nicovideoController.play();
+						g_callback();
 						break;
 				}
 				break;
@@ -160,7 +180,7 @@ export const embedSoundCloud = ({
 			soundCloudController.play(),
 		);
 		soundCloudController.target?.bind(window.SC.Widget.Events.FINISH, () =>
-			soundCloudController.play(),
+			g_callback(),
 		);
 		soundCloudController.target?.bind(
 			window.SC.Widget.Events.ERROR,

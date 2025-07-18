@@ -84,33 +84,29 @@
                 : "bg-zinc-800 hover:bg-zinc-700 text-zinc-200"
         }`}
 >
-    <!-- 行番号ラベル -->
-    <span
-        class="absolute top-0 left-0 h-full w-10 flex items-center justify-center
+    <div tabindex="0" role="button" onkeydown={() => {}} {onclick}>
+        <!-- 行番号ラベル -->
+        <span
+            class="absolute top-0 left-0 h-full w-10 flex items-center justify-center
 			text-white text-xs font-mono font-bold bg-blue-600
 			rounded-r-md z-20 shadow-md"
-    >
-        {index + 1}
-    </span>
+        >
+            {index + 1}
+        </span>
 
-    <!-- 埋め込み画像 -->
-    <img
-        src={embedUrl}
-        alt=""
-        aria-hidden="true"
-        class="pointer-events-none absolute right-2 -top-10 h-40 w-auto opacity-30 select-none object-contain"
-    />
+        <!-- 埋め込み画像 -->
+        <img
+            src={embedUrl}
+            alt=""
+            aria-hidden="true"
+            class="pointer-events-none absolute right-2 -top-10 h-40 w-auto opacity-30 select-none object-contain"
+        />
 
-    <!-- 本体 -->
-    <div class="relative z-10 flex items-center gap-2">
-        <div class="flex justify-between items-center flex-1 gap-2">
-            <span class="truncate text-sm">{contentUrl}</span>
-            <button
-                {onclick}
-                class="p-2 bg-blue-500 hover:bg-blue-400 text-white rounded-md"
-            >
-                <PlayIcon class="w-4 h-4" />
-            </button>
+        <!-- 本体 -->
+        <div class="relative z-10 flex items-center gap-2">
+            <div class="flex justify-between items-center flex-1 gap-2">
+                <span class="truncate text-sm">{contentUrl}</span>
+            </div>
         </div>
     </div>
 </li>
