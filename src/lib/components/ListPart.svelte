@@ -25,20 +25,15 @@
     } catch (err) {}
 
     let embedding = $state(false);
-    let embedError = $state(false);
     let thumbnail = $state("");
     let title = $state("");
     let author = $state("");
-    let videoEmbedYouTube = $state(false);
-    let videoEmbedNicovideo = $state(false);
-    let audioEmbedSoundCloud = $state(false);
     const tryEmbed = (siteInfo: SiteInfo) => {
         try {
             embedding = true;
             const url = new URL(contentUrl);
             switch (siteInfo.id) {
                 case 1601: {
-                    videoEmbedYouTube = true;
                     const parsed = parseVideoEmbedYouTube(url);
                     if (parsed) {
                         const cache =
@@ -60,7 +55,6 @@
                     break;
                 }
                 case 1602: {
-                    videoEmbedNicovideo = true;
                     const parsed = parseVideoEmbedNicovideo(url);
                     if (parsed) {
                         const cache =
@@ -82,7 +76,6 @@
                     break;
                 }
                 case 3201: {
-                    audioEmbedSoundCloud = true;
                     const parsed = parseAudioEmbedSoundCloud(url);
                     if (parsed) {
                         const cache =
@@ -106,7 +99,6 @@
             }
             if (!thumbnail) throw 114514;
         } catch (err) {
-            embedError = true;
             embedding = false;
         }
     };

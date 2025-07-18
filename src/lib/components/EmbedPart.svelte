@@ -25,7 +25,6 @@
   } catch (err) {}
 
   let embedding = $state(false);
-  let embedError = $state(false);
   let embedUrl = $state("");
   let videoEmbedYouTube = $state(false);
   let videoEmbedNicovideo = $state(false);
@@ -77,7 +76,6 @@
       }
       if (!embedUrl) throw 114514;
     } catch (err) {
-      embedError = true;
       embedding = false;
     }
   };
