@@ -47,16 +47,28 @@
             activeController?.pause();
         }
     };
+    $effect(() => {
+        loadUrls();
+    });
 </script>
 
 <!-- レイアウト全体 -->
 <div class="max-w-3xl mx-auto p-6 space-y-6 text-white">
     <!-- URL入力 -->
-    <textarea
-        class="w-full h-32 p-3 bg-zinc-900 text-white rounded-md border border-zinc-700 resize-none"
-        placeholder="改行で動画のURLを入力してください"
-        bind:value={rawUrls}
-    ></textarea>
+    <div>
+        <label
+            for="urlInput"
+            class="block mb-2 text-sm font-semibold text-zinc-300"
+        >
+            動画URLリスト（改行で区切って入力）
+        </label>
+        <textarea
+            id="urlInput"
+            class="w-full h-32 p-3 bg-zinc-900 text-white rounded-md border border-zinc-700 resize-none"
+            placeholder="例：https://www.youtube.com/watch?v=..."
+            bind:value={rawUrls}
+        ></textarea>
+    </div>
 
     <!-- 読み込みボタン -->
     <div class="text-right">
