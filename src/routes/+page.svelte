@@ -27,17 +27,21 @@
     let isRepeat = $state(false);
     let isShuffle = $state(false);
 
+    const play = (index: number) => {
+        currentIndex = index;
+        history.push(currentIndex);
+        lottery.delete(currentIndex);
+    };
+
     const next = () => {
         if (isShuffle) {
             if (!lottery.size) {
                 lottery = new Set(urls.keys());
             }
-            currentIndex = [...lottery][(lottery.size * Math.random()) | 0];
+            play([...lottery][(lottery.size * Math.random()) | 0]);
         } else {
-            currentIndex = ++currentIndex % urls.length;
+            play(++currentIndex % urls.length);
         }
-        history.push(currentIndex);
-        lottery.delete(currentIndex);
     };
 
     onEnded(() => {
@@ -71,11 +75,6 @@
         lottery = new Set(urls.keys());
         play(0);
         initTimestamp = performance.now();
-    };
-
-    const play = (index: number) => {
-        currentIndex = index;
-        lottery.delete(index);
     };
 
     $effect(() => {
@@ -117,8 +116,15 @@
             </span>
             <button
                 onclick={() => {
-                    const prev = history.pop();
-                    if (prev !== undefined) currentIndex = prev;
+                    if (isShuffle) {
+                        let prev;
+                        do {
+                            prev = history.pop();
+                        } while (prev === currentIndex && history.length);
+                        if (prev !== undefined) currentIndex = prev;
+                    } else {
+                        play((--currentIndex + urls.length) % urls.length);
+                    }
                 }}
                 class="p-2 bg-zinc-700 text-white rounded hover:bg-zinc-600"
                 aria-label="前へ"
