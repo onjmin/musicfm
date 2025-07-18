@@ -91,7 +91,7 @@
     <div
         class="w-full max-w-2xl mx-auto bg-black rounded-md overflow-hidden aspect-video"
     >
-        {#key initTimestamp || currentIndex}
+        {#key initTimestamp && currentIndex}
             {#if urls.length}
                 <EmbedPart
                     contentUrl={urls[currentIndex]}
