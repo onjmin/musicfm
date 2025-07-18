@@ -191,7 +191,7 @@ const handle = (e: MessageEvent) => {
 			const title = data.videoInfo.title;
 			const author = null;
 			const videoId = data.videoInfo.videoId.slice(2);
-			if (videoId === `Nicovideo###${g_cachedKey}`) {
+			if (`Nicovideo###${videoId}` === g_cachedKey) {
 				saveCache(g_cachedKey, thumbnail, title, author);
 			}
 			break;
