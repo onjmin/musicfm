@@ -3,9 +3,8 @@
 
     let rawUrls = $state("");
     let urls: string[] = $state([]);
-    let currentIndex = $state(0);
     let isPlaying = $state(false);
-
+    let currentIndex = $state(0);
     let currentUrl = $state("");
 
     function loadUrls() {
@@ -14,13 +13,15 @@
             .map((line) => line.trim())
             .filter(Boolean);
         urls = lines;
-        currentIndex = 0;
         isPlaying = true;
+        currentIndex = 0;
+        currentUrl = urls[currentIndex];
     }
 
     const play = (index: number) => {
-        currentIndex = index;
         isPlaying = true;
+        currentIndex = index;
+        currentUrl = urls[currentIndex];
     };
 
     const togglePlayback = () => {
