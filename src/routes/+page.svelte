@@ -24,8 +24,12 @@
     let history: number[];
     let lottery = new Set<number>();
 
-    let isRepeat = $state(false);
-    let isShuffle = $state(false);
+    let isRepeat = $state(
+        globalThis?.localStorage?.getItem("isRepeat") === "on",
+    );
+    let isShuffle = $state(
+        globalThis?.localStorage?.getItem("isShuffle") === "on",
+    );
 
     const play = (index: number) => {
         currentIndex = index;
@@ -146,7 +150,10 @@
         <div class="flex items-center gap-4">
             <Switch
                 checked={isRepeat}
-                onCheckedChange={(e) => (isRepeat = e.checked)}
+                onCheckedChange={(e) => {
+                    isRepeat = e.checked;
+                    localStorage.setItem("isRepeat", e.checked ? "on" : "off");
+                }}
                 controlActive="bg-blue-500"
                 controlInactive="bg-zinc-500"
             >
@@ -156,7 +163,10 @@
 
             <Switch
                 checked={isShuffle}
-                onCheckedChange={(e) => (isShuffle = e.checked)}
+                onCheckedChange={(e) => {
+                    isShuffle = e.checked;
+                    localStorage.setItem("isShuffle", e.checked ? "on" : "off");
+                }}
                 controlActive="bg-purple-500"
                 controlInactive="bg-zinc-500"
             >
@@ -226,8 +236,15 @@
         ></textarea>
     </div>
 
-    <!-- 読み込みボタン -->
-    <div class="text-right">
+    <div class="text-right space-x-2">
+        <button
+            onclick={() => {
+                rawUrls = "";
+            }}
+            class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+        >
+            全消し
+        </button>
         <button
             onclick={loadUrls}
             class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
