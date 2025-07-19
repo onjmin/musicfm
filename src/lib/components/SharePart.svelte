@@ -1,7 +1,7 @@
 <script lang="ts">
     import { base } from "$app/paths";
     import { imgurHistory, uploadImgur } from "$lib/imgur";
-    import { img2str, str2img } from "$lib/str2img";
+    import { str2img } from "$lib/str2img";
     import { sharedLogger } from "$lib/webhook";
     import { ShareIcon } from "@lucide/svelte";
     import IconX from "@lucide/svelte/icons/x";

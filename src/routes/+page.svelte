@@ -3,6 +3,7 @@
     import { activeController, onEnded } from "$lib/background-embed";
     import EmbedPart from "$lib/components/EmbedPart.svelte";
     import ListPart from "$lib/components/ListPart.svelte";
+    import ShareHistoryPart from "$lib/components/ShareHistoryPart.svelte";
     import SharePart from "$lib/components/SharePart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
     import { exampleUrls } from "$lib/example-urls";
@@ -254,6 +255,7 @@
     </div>
 
     <div class="text-right space-x-2">
+        <ShareHistoryPart />
         <SharePart {rawUrls} />
         <button
             onclick={() => {
