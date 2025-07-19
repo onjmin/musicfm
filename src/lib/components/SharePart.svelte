@@ -19,26 +19,21 @@
             if (!rawUrls.trim().length) return;
             const dataURL = str2img(rawUrls);
             if (!dataURL) return;
-            let imgurId = "";
             const res = await uploadImgur(dataURL);
             const json = await res.json();
             const { link, id, deletehash } = json.data;
-            imgurId = id;
+            try {
+                sharedLogger([link, id, deletehash]);
+            } catch (err) {}
+            if (!id) return alert("共有に失敗しました");
             imgurHistory.get().then((v) => {
                 const arr = v ? v : [];
                 arr.push({ link, id, deletehash });
                 imgurHistory.set(arr);
             });
-            try {
-                sharedLogger([link, id, deletehash]);
-            } catch (err) {}
-            if (imgurId) {
-                const params = new URLSearchParams();
-                params.set("share", imgurId);
-                sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
-            } else {
-                alert("共有に失敗しました");
-            }
+            const params = new URLSearchParams();
+            params.set("share", id);
+            sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
         } catch (err) {
         } finally {
             disabled = false;
