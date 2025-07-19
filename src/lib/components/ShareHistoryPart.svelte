@@ -67,12 +67,12 @@
                                 href={toURL(imgurResponse)}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                class="block flex-1 min-h-[2rem] max-w-full truncate text-blue-500 hover:underline"
+                                class="min-w-0 flex-1 block truncate text-blue-500 hover:underline"
                             >
                                 {toURL(imgurResponse)}
                             </a>
                             <button
-                                class="text-zinc-400 hover:text-red-500"
+                                class="shrink-0 w-6 h-6 text-zinc-400 hover:text-red-500"
                                 onclick={async () => {
                                     if (
                                         !confirm(
