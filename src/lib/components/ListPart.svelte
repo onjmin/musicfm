@@ -148,7 +148,51 @@
     <!-- 本体 -->
     <div class="relative z-20 flex flex-col justify-center pointer-events-none">
         <span class="text-xs text-zinc-500 truncate">{contentUrl}</span>
-        <span class="text-base font-semibold truncate">{title}</span>
+
+        {#if isActive}
+            <div class="marquee-wrapper text-base font-semibold text-white">
+                <div class="marquee-track">
+                    <div class="marquee-item">{title}</div>
+                    <div class="marquee-item">{title}</div>
+                </div>
+            </div>
+        {:else}
+            <span class="text-base font-semibold truncate text-white"
+                >{title}</span
+            >
+        {/if}
+
         <span class="text-sm text-zinc-400 truncate">{author}</span>
     </div>
 </li>
+
+<style>
+    .marquee-wrapper {
+        position: relative;
+        overflow: hidden;
+        width: 100%; /* 親の幅 */
+        height: 1.5rem;
+    }
+
+    .marquee-track {
+        display: flex;
+        width: 200%; /* 2倍幅 */
+        animation: marquee-scroll 10s linear infinite;
+    }
+
+    .marquee-item {
+        width: 50%; /* 親の幅の半分、つまり1つのテキストは親幅と同じ */
+        white-space: nowrap;
+        flex-shrink: 0; /* 縮まない */
+        text-align: left;
+    }
+
+    @keyframes marquee-scroll {
+        0% {
+            transform: translateX(0%);
+        }
+        100% {
+            transform: translateX(-50%); /* 1つ分（親幅分）だけ左に移動 */
+        }
+    }
+</style>

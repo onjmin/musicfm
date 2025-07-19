@@ -148,6 +148,7 @@
                 checked={isRepeat}
                 onCheckedChange={(e) => (isRepeat = e.checked)}
                 controlActive="bg-blue-500"
+                controlInactive="bg-zinc-500"
             >
                 {#snippet inactiveChild()}<RepeatIcon size="16" />{/snippet}
                 {#snippet activeChild()}<RepeatIcon size="16" />{/snippet}
@@ -157,6 +158,7 @@
                 checked={isShuffle}
                 onCheckedChange={(e) => (isShuffle = e.checked)}
                 controlActive="bg-purple-500"
+                controlInactive="bg-zinc-500"
             >
                 {#snippet inactiveChild()}<ShuffleIcon size="16" />{/snippet}
                 {#snippet activeChild()}<ShuffleIcon size="16" />{/snippet}
