@@ -238,22 +238,20 @@
     </div>
 
     <div class="text-right space-x-2">
-        <div class="text-right space-x-2">
-            <SharePart />
-            <button
-                onclick={() => {
-                    rawUrls = "";
-                }}
-                class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md"
-            >
-                全消し
-            </button>
-            <button
-                onclick={loadUrls}
-                class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
-            >
-                読み込み
-            </button>
-        </div>
+        <SharePart />
+        <button
+            onclick={() => {
+                rawUrls = "";
+            }}
+            class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md"
+        >
+            全消し
+        </button>
+        <button
+            onclick={loadUrls}
+            class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+        >
+            読み込み
+        </button>
     </div>
 </div>
