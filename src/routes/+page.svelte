@@ -2,6 +2,7 @@
     import { activeController, onEnded } from "$lib/background-embed";
     import EmbedPart from "$lib/components/EmbedPart.svelte";
     import ListPart from "$lib/components/ListPart.svelte";
+    import SharePart from "$lib/components/SharePart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
     import { exampleUrls } from "$lib/example-urls";
     import {
@@ -237,19 +238,22 @@
     </div>
 
     <div class="text-right space-x-2">
-        <button
-            onclick={() => {
-                rawUrls = "";
-            }}
-            class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
-        >
-            全消し
-        </button>
-        <button
-            onclick={loadUrls}
-            class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
-        >
-            読み込み
-        </button>
+        <div class="text-right space-x-2">
+            <SharePart />
+            <button
+                onclick={() => {
+                    rawUrls = "";
+                }}
+                class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md"
+            >
+                全消し
+            </button>
+            <button
+                onclick={loadUrls}
+                class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+                読み込み
+            </button>
+        </div>
     </div>
 </div>
