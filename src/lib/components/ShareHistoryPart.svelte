@@ -49,7 +49,7 @@
         </header>
         <article class="space-y-4">
             <div>
-                <p class="opacity-60">ここから共有を解除できます。</p>
+                <p class="opacity-60">ここから共有停止できます。</p>
             </div>
 
             {#if !imgurList.length}
@@ -59,45 +59,49 @@
                     <div>動画URLリストを共有してから出直してね。</div>
                 </div>
             {:else}
-                {#each imgurList as imgurResponse, i}
-                    <li class="flex items-center gap-2 text-sm">
-                        <span class="text-zinc-400">{i + 1}.</span>
-                        <a
-                            href={toURL(imgurResponse)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="block flex-1 min-h-[2rem] max-w-full truncate text-blue-500 hover:underline"
-                        >
-                            {toURL(imgurResponse)}
-                        </a>
-                        <button
-                            class="text-zinc-400 hover:text-red-500"
-                            onclick={async () => {
-                                if (
-                                    !confirm(
-                                        `${imgurResponse.id}を削除しますか？`,
+                <ul class="space-y-2">
+                    {#each imgurList as imgurResponse, i}
+                        <li class="flex items-center gap-2 text-sm">
+                            <span class="text-zinc-400">{i + 1}.</span>
+                            <a
+                                href={toURL(imgurResponse)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="block flex-1 min-h-[2rem] max-w-full truncate text-blue-500 hover:underline"
+                            >
+                                {toURL(imgurResponse)}
+                            </a>
+                            <button
+                                class="text-zinc-400 hover:text-red-500"
+                                onclick={async () => {
+                                    if (
+                                        !confirm(
+                                            `${imgurResponse.id}を共有停止しますか？`,
+                                        )
                                     )
-                                )
-                                    return;
-                                try {
-                                    await deleteImgur(imgurResponse.deletehash);
-                                } catch (err) {
-                                    alert(
-                                        `${imgurResponse.id}の削除に失敗しました`,
+                                        return;
+                                    try {
+                                        await deleteImgur(
+                                            imgurResponse.deletehash,
+                                        );
+                                    } catch (err) {
+                                        alert(
+                                            `${imgurResponse.id}の共有停止に失敗しました`,
+                                        );
+                                        return;
+                                    }
+                                    imgurList = imgurList.filter(
+                                        (v) => v.id !== imgurResponse.id,
                                     );
-                                    return;
-                                }
-                                imgurList = imgurList.filter(
-                                    (v) => v.id !== imgurResponse.id,
-                                );
-                                imgurHistory.set(imgurList);
-                            }}
-                            aria-label="共有停止"
-                        >
-                            <i class="lucide lucide-trash w-4 h-4"></i>
-                        </button>
-                    </li>
-                {/each}
+                                    imgurHistory.set(imgurList);
+                                }}
+                                aria-label="共有停止"
+                            >
+                                <i class="lucide lucide-trash w-4 h-4"></i>
+                            </button>
+                        </li>
+                    {/each}
+                </ul>
             {/if}
         </article>
         <footer></footer>
