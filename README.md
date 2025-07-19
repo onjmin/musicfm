@@ -1,38 +1,36 @@
-# sv
+# 🎵 Music FM
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+> 君だけのプレイリストを友達と共有しよう
 
-## Creating a project
+**Music FM** は、YouTubeの動画URLを改行で入力するだけで、自分だけのプレイリストを再生・共有できるWebアプリです。
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```bash
-# create a new project in the current directory
-npx sv create
+## 🔧 機能
 
-# create a new project in my-app
-npx sv create my-app
-```
+- YouTube/ニコニコ動画/SoundCloudの連続再生
+- URLリストの読み込み・全消去
+- プレイリストの共有リンク生成
+- 共有履歴の保存・削除
 
-## Developing
+---
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 🚀 アクセス
 
-```bash
-npm run dev
+[https://musicfm.pages.dev](https://musicfm.pages.dev)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+---
 
-## Building
+## 🛠 技術
 
-To create a production version of your app:
+- SvelteKit
+- Tailwind CSS
+- YouTube IFrame Player API
+- LocalStorage
+- Imgur API
 
-```bash
-npm run build
-```
+---
 
-You can preview the production build with `npm run preview`.
+## 📄 ライセンス
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+AGPL-3.0
