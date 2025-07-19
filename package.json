@@ -37,6 +37,8 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "0.525.0",
+		"date-fns": "4.1.0",
+		"localforage": "1.10.0",
 		"valibot": "1.1.0"
 	},
 	"volta": {

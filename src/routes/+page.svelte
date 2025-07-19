@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { page } from "$app/state";
     import { activeController, onEnded } from "$lib/background-embed";
     import EmbedPart from "$lib/components/EmbedPart.svelte";
     import ListPart from "$lib/components/ListPart.svelte";
     import SharePart from "$lib/components/SharePart.svelte";
     import { AUDIO_URL, Enum, VIDEO_URL } from "$lib/content-schema";
     import { exampleUrls } from "$lib/example-urls";
+    import { img2str } from "$lib/str2img";
     import {
         ChevronLeftIcon,
         ChevronRightIcon,
@@ -83,9 +85,20 @@
     };
 
     $effect(() => {
-        setTimeout(() => {
-            const userData = localStorage.getItem("userData");
-            if (userData) rawUrls = userData;
+        setTimeout(async () => {
+            const share = page.url.searchParams.get("share");
+            let shared = "";
+            if (share) {
+                try {
+                    shared = await img2str(`https://i.imgur.com/${share}.png`);
+                } catch (err) {}
+            }
+            if (shared.length) {
+                rawUrls = shared;
+            } else {
+                const userData = localStorage.getItem("userData");
+                if (userData) rawUrls = userData;
+            }
             loadUrls();
         });
     });
@@ -238,7 +251,7 @@
     </div>
 
     <div class="text-right space-x-2">
-        <SharePart />
+        <SharePart {rawUrls} />
         <button
             onclick={() => {
                 rawUrls = "";

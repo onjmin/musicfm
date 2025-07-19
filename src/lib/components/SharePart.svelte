@@ -1,8 +1,13 @@
 <script lang="ts">
     import { base } from "$app/paths";
+    import { imgurHistory, uploadImgur } from "$lib/imgur";
+    import { img2str, str2img } from "$lib/str2img";
+    import { sharedLogger } from "$lib/webhook";
     import { ShareIcon } from "@lucide/svelte";
     import IconX from "@lucide/svelte/icons/x";
     import { Popover } from "@skeletonlabs/skeleton-svelte";
+
+    let { rawUrls } = $props();
 
     let open = $state(false);
     let sharedUrl = $state("");
@@ -10,9 +15,32 @@
 
     const genURL = async () => {
         disabled = true;
-        const params = new URLSearchParams();
-        params.set("share", String(333));
-        sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
+        if (!rawUrls.trim().length) return;
+        const dataURL = str2img(rawUrls);
+        if (!dataURL) return;
+        let imgurId = "";
+        try {
+            const res = await uploadImgur(dataURL);
+            const json = await res.json();
+            const { link, id, deletehash } = json.data;
+            imgurId = id;
+            imgurHistory.get().then((v) => {
+                const arr = v ? v : [];
+                arr.push({ link, id, deletehash });
+                imgurHistory.set(arr);
+            });
+            try {
+                sharedLogger([link, id, deletehash]);
+            } catch (err) {}
+            return true;
+        } catch (err) {}
+        if (imgurId) {
+            const params = new URLSearchParams();
+            params.set("share", imgurId);
+            sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
+        } else {
+            alert("共有に失敗しました");
+        }
         disabled = false;
     };
 </script>
