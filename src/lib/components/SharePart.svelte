@@ -15,11 +15,11 @@
 
     const genURL = async () => {
         disabled = true;
-        if (!rawUrls.trim().length) return;
-        const dataURL = str2img(rawUrls);
-        if (!dataURL) return;
-        let imgurId = "";
         try {
+            if (!rawUrls.trim().length) return;
+            const dataURL = str2img(rawUrls);
+            if (!dataURL) return;
+            let imgurId = "";
             const res = await uploadImgur(dataURL);
             const json = await res.json();
             const { link, id, deletehash } = json.data;
@@ -32,16 +32,17 @@
             try {
                 sharedLogger([link, id, deletehash]);
             } catch (err) {}
-            return true;
-        } catch (err) {}
-        if (imgurId) {
-            const params = new URLSearchParams();
-            params.set("share", imgurId);
-            sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
-        } else {
-            alert("共有に失敗しました");
+            if (imgurId) {
+                const params = new URLSearchParams();
+                params.set("share", imgurId);
+                sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
+            } else {
+                alert("共有に失敗しました");
+            }
+        } catch (err) {
+        } finally {
+            disabled = false;
         }
-        disabled = false;
     };
 </script>
 
