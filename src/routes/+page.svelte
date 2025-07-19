@@ -119,19 +119,21 @@
     <div
         class="w-full max-w-2xl mx-auto bg-black rounded-md overflow-hidden aspect-video"
     >
-        {#key initTimestamp && currentIndex}
-            {#if urls.length}
-                <EmbedPart
-                    contentUrl={urls[currentIndex]}
-                    contentType={urlsType[currentIndex]}
-                />
-            {:else}
-                <div
-                    class="flex items-center justify-center h-full text-zinc-400"
-                >
-                    ここに動画が表示されます
-                </div>
-            {/if}
+        {#key initTimestamp}
+            {#key currentIndex}
+                {#if urls.length}
+                    <EmbedPart
+                        contentUrl={urls[currentIndex]}
+                        contentType={urlsType[currentIndex]}
+                    />
+                {:else}
+                    <div
+                        class="flex items-center justify-center h-full text-zinc-400"
+                    >
+                        ここに動画が表示されます
+                    </div>
+                {/if}
+            {/key}
         {/key}
     </div>
 
