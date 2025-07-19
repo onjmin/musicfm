@@ -39,7 +39,7 @@
 <div class="h-screen flex flex-col bg-zinc-950 text-white overflow-hidden">
 	<!-- ヘッダー（固定） -->
 	<header
-		class="bg-zinc-900 shadow-md px-6 py-4 fixed top-0 left-0 right-0 z-50"
+		class="bg-zinc-900 shadow-md px-6 py-4 fixed top-0 left-0 right-0 z-50 text-center"
 	>
 		<h1 class="text-xl font-bold">🎶 おぉんがくぷれぃやああ 🎶</h1>
 	</header>
@@ -51,8 +51,8 @@
 
 	<!-- フッター（固定） -->
 	<footer
-		class="bg-zinc-900 shadow-inner px-6 py-3 fixed bottom-0 left-0 right-0 z-50 text-sm text-zinc-400"
+		class="bg-zinc-900 shadow-inner px-6 py-3 fixed bottom-0 left-0 right-0 z-50 text-sm text-zinc-400 text-center"
 	>
-		© 2025 J民の音楽プレイヤー
+		© 2025 おんJ民. All rights reserved.
 	</footer>
 </div>
