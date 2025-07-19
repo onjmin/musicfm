@@ -1,6 +1,7 @@
 <script lang="ts">
     import { base } from "$app/paths";
     import { type ImgurResponse, deleteImgur, imgurHistory } from "$lib/imgur";
+    import { Trash2Icon } from "@lucide/svelte";
     import IconX from "@lucide/svelte/icons/x";
     import { Modal } from "@skeletonlabs/skeleton-svelte";
 
@@ -97,7 +98,7 @@
                                 }}
                                 aria-label="共有停止"
                             >
-                                <i class="lucide lucide-trash w-4 h-4"></i>
+                                <Trash2Icon />
                             </button>
                         </li>
                     {/each}
