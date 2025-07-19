@@ -43,11 +43,11 @@ export const parseVideoEmbedNicovideo = (url: URL): string | null => {
 export const makeNicovideoEmbedURL = (id: string) =>
 	`https://embed.nicovideo.jp/watch/sm${id}?jsapi=1&amp;from=0`;
 export const makeNicovideoThumbnailURL = (id: string) =>
-	`https://nicovideo.cdn.nimg.jp/thumbnails/${id}/${id}`; // TODO
+	`https://nicovideo.cdn.nimg.jp/thumbnails/${id}/${id}`;
 
 export const parseAudioEmbedSoundCloud = (url: URL): string | null =>
 	encodeURIComponent(url.href);
 export const makeSoundCloudEmbedURL = (url: string) =>
 	`https://w.soundcloud.com/player/?url=${url}&visual=true`;
 export const makeSoundCloudThumbnailURL = (id: string) =>
-	"https://logo.clearbit.com/https://soundcloud.com"; // TODO
+	"https://logo.clearbit.com/https://soundcloud.com";
