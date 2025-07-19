@@ -97,7 +97,12 @@
                     shared = await img2str(`https://i.imgur.com/${share}.png`);
                 } catch (err) {}
             }
-            if (shared.length) {
+            if (
+                shared.length &&
+                shared.split("\n").length === 1 &&
+                shared.length < 1024
+                // 削除済み画像は読み込まない
+            ) {
                 rawUrls = shared;
             } else {
                 const userData = localStorage.getItem("userData");
