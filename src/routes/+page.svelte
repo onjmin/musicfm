@@ -64,13 +64,16 @@
         urlsType = [];
         history = [];
         const lines = rawUrls.split("\n").flatMap((line) => {
+            const m = line.match(/https:.+?(\s|$)/);
+            if (!m) return [];
+            const [urlBlock] = m;
             try {
-                const videoUrl = v.safeParse(VIDEO_URL, line);
+                const videoUrl = v.safeParse(VIDEO_URL, urlBlock);
                 if (videoUrl.success) {
                     urlsType.push(Enum.Video);
                     return [videoUrl.output];
                 }
-                const audioUrl = v.safeParse(AUDIO_URL, line);
+                const audioUrl = v.safeParse(AUDIO_URL, urlBlock);
                 if (audioUrl.success) {
                     urlsType.push(Enum.Audio);
                     return [audioUrl.output];
