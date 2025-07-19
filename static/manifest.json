@@ -1,0 +1,16 @@
+{
+	"name": "Music FM",
+	"short_name": "MusicFM",
+	"description": "君だけのプレイリストを友達と共有しよう",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#123456",
+	"theme_color": "#FF9933",
+	"icons": [
+		{
+			"src": "favicon.svg",
+			"sizes": "480x480",
+			"type": "image/png"
+		}
+	]
+}
