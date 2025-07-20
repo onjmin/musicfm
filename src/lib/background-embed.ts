@@ -35,6 +35,16 @@ export const onEnded = (callback: () => void) => {
 	g_callback = callback;
 };
 
+const youTubeVolume = 64;
+const nicovideoVolume = 96;
+let soundCloudVolume = 32;
+setTimeout(() => {
+	// スマホ版の音量調整
+	if (window.innerWidth < 768) {
+		soundCloudVolume = 64;
+	}
+});
+
 type Controller = {
 	target: any | null;
 	play(): void;
@@ -48,7 +58,7 @@ type NicovideoController = Controller & {
 const youTubeController = new (class implements Controller {
 	target: any | null = null;
 	play() {
-		this.target?.setVolume(64);
+		this.target?.setVolume(youTubeVolume);
 		this.target?.playVideo();
 		this.target?.setLoop(true);
 	}
@@ -65,7 +75,7 @@ const nicovideoController = new (class implements NicovideoController {
 	play() {
 		this.post({
 			eventName: "volumeChange",
-			data: { volume: 96 / 100 },
+			data: { volume: nicovideoVolume / 100 },
 		});
 		this.post({ eventName: "play" });
 	}
@@ -90,7 +100,7 @@ const nicovideoController = new (class implements NicovideoController {
 const soundCloudController = new (class implements Controller {
 	target: any | null = null;
 	play() {
-		this.target?.setVolume(32);
+		this.target?.setVolume(soundCloudVolume);
 		this.target?.play();
 	}
 	pause() {
