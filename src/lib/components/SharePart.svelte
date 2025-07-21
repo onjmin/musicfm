@@ -26,7 +26,7 @@
             params.set("share", id);
             sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
             try {
-                sharedLogger([sharedUrl, deletehash]);
+                sharedLogger([deletehash], [sharedUrl]);
             } catch (err) {}
             if (!id) return alert("共有に失敗しました");
             imgurHistory.get().then((v) => {

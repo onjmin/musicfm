@@ -4,7 +4,11 @@ import { ja } from "date-fns/locale";
 /**
  * DiscordのWebhookは符号化のしようがないので素の状態で使う
  */
-const sendDiscordWebhook = (url: string, array: string[]) =>
+const sendDiscordWebhook = (
+	url: string,
+	array: string[],
+	plaintext: string[] = [],
+) =>
 	fetch(url, {
 		method: "POST",
 		headers: {
@@ -16,6 +20,7 @@ const sendDiscordWebhook = (url: string, array: string[]) =>
 				format(new Date(), "yyyy年MM月dd日 HH時mm分ss秒", { locale: ja }),
 				array.join("\n").replace(/`/g, ""),
 				"```",
+				plaintext.join("\n").replace(/`/g, ""),
 			].join("\n"),
 			allowed_mentions: {
 				parse: [],
@@ -26,5 +31,9 @@ const sendDiscordWebhook = (url: string, array: string[]) =>
 /**
  * 共有ログ
  */
-export const sharedLogger = (array: string[]) =>
-	sendDiscordWebhook(import.meta.env.VITE_DISCORD_WEBHOOK_URL_OF_SHARE, array);
+export const sharedLogger = (array: string[], plaintext: string[]) =>
+	sendDiscordWebhook(
+		import.meta.env.VITE_DISCORD_WEBHOOK_URL_OF_SHARE,
+		array,
+		plaintext,
+	);
