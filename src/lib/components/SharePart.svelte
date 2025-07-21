@@ -22,8 +22,11 @@
             const res = await uploadImgur(dataURL);
             const json = await res.json();
             const { link, id, deletehash } = json.data;
+            const params = new URLSearchParams();
+            params.set("share", id);
+            sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
             try {
-                sharedLogger([link, id, deletehash]);
+                sharedLogger([sharedUrl, deletehash]);
             } catch (err) {}
             if (!id) return alert("共有に失敗しました");
             imgurHistory.get().then((v) => {
@@ -31,9 +34,6 @@
                 arr.push({ link, id, deletehash });
                 imgurHistory.set(arr);
             });
-            const params = new URLSearchParams();
-            params.set("share", id);
-            sharedUrl = `${window.location.origin}${base}/?${params.toString()}`;
         } catch (err) {
         } finally {
             disabled = false;
