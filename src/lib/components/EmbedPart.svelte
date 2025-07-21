@@ -16,7 +16,7 @@
   } from "$lib/embed";
   import { SiteInfo, findIn } from "$lib/whitelist/site-info";
 
-  let { contentUrl = "", contentType = 0 } = $props();
+  let { contentUrl = "", contentType = 0, updateCache } = $props();
 
   let siteInfo: SiteInfo | null = $state(null);
   const temp = contentTemplateMap.get(contentType) ?? [];
@@ -40,6 +40,7 @@
           if (parsed) {
             embedUrl = makeYouTubeEmbedURL(parsed);
             embedYouTube({
+              updateCache,
               cachedKey: `YouTube###${parsed}`,
               iframeParentDOM: document.querySelector(".middle-wrapper"),
               embedUrl,
@@ -55,6 +56,7 @@
           if (parsed) {
             embedUrl = makeNicovideoEmbedURL(parsed);
             embedNicovideo({
+              updateCache,
               cachedKey: `Nicovideo###${parsed}`,
               iframeDOM: document.querySelector("#musicfm-embed iframe"),
             });
@@ -67,6 +69,7 @@
           if (parsed) {
             embedUrl = makeSoundCloudEmbedURL(parsed);
             embedSoundCloud({
+              updateCache,
               cachedKey: `SoundCloud###${parsed}`,
               iframeDOM: document.querySelector("#musicfm-embed iframe"),
             });

@@ -114,12 +114,14 @@ declare global {
 	var onYouTubeIframeAPIReady: () => void;
 }
 export const embedYouTube = ({
+	updateCache,
 	cachedKey,
 	iframeParentDOM,
 	embedUrl,
 	width,
 	height,
 }: {
+	updateCache: () => void;
 	cachedKey: string;
 	iframeParentDOM: Element | null;
 	embedUrl: string;
@@ -146,6 +148,7 @@ export const embedYouTube = ({
 					const title = data.title;
 					const author = data.author;
 					saveCache(cachedKey, thumbnail, title, author);
+					updateCache();
 				},
 				onError: console.error,
 				onStateChange: (event: any) => {
@@ -166,15 +169,19 @@ export const embedYouTube = ({
 };
 
 let g_cachedKey = "";
+let g_updateCache = () => {};
 export const embedNicovideo = ({
+	updateCache,
 	cachedKey,
 	iframeDOM,
 }: {
+	updateCache: () => void;
 	cachedKey: string;
 	iframeDOM: HTMLIFrameElement | null;
 }) => {
 	if (!iframeDOM) return;
 	activeController = nicovideoController;
+	g_updateCache = updateCache;
 	g_cachedKey = cachedKey;
 	nicovideoController.target = iframeDOM;
 	window.removeEventListener("message", handle);
@@ -201,6 +208,7 @@ const handle = (e: MessageEvent) => {
 			const videoId = data.videoInfo.videoId.slice(2);
 			if (`Nicovideo###${videoId}` === g_cachedKey) {
 				saveCache(g_cachedKey, thumbnail, title, author);
+				g_updateCache();
 			}
 			break;
 		}
@@ -211,9 +219,11 @@ declare global {
 	var SC: any;
 }
 export const embedSoundCloud = ({
+	updateCache,
 	cachedKey,
 	iframeDOM,
 }: {
+	updateCache: () => void;
 	cachedKey: string;
 	iframeDOM: HTMLIFrameElement | null;
 }) => {
@@ -228,6 +238,7 @@ export const embedSoundCloud = ({
 				const title = res.title;
 				const author = res.user.username;
 				saveCache(cachedKey, thumbnail, title, author);
+				updateCache();
 			});
 		});
 		soundCloudController.target?.bind(window.SC.Widget.Events.FINISH, () =>

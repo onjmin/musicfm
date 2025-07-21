@@ -24,13 +24,11 @@
         siteInfo = findIn(temp, new URL(contentUrl).hostname);
     } catch (err) {}
 
-    let embedding = $state(false);
     let thumbnail = $state("");
     let title = $state("");
     let author = $state("");
     const tryEmbed = (siteInfo: SiteInfo) => {
         try {
-            embedding = true;
             const url = new URL(contentUrl);
             switch (siteInfo.id) {
                 case 1601: {
@@ -97,16 +95,12 @@
                     break;
                 }
             }
-            if (!thumbnail) throw 114514;
-        } catch (err) {
-            embedding = false;
-        }
+        } catch (err) {}
     };
 
     $effect(() => {
         if (siteInfo) {
             tryEmbed(siteInfo);
-            if (!embedding) return;
         }
     });
 </script>

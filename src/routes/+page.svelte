@@ -24,9 +24,13 @@
     let urls: string[] = $state([]);
     let urlsType: number[] = $state([]);
     let currentIndex = $state(0);
-    let initTimestamp = $state(0);
     let history: number[];
     let lottery = new Set<number>();
+    let initTimestamp = $state(0);
+    let updatedTimestamp = $state(0);
+    const updateTimestamp = () => {
+        updatedTimestamp = performance.now();
+    };
 
     let isRepeat = $state(
         globalThis?.localStorage?.getItem("isRepeat") === "on",
@@ -123,6 +127,7 @@
                     <EmbedPart
                         contentUrl={urls[currentIndex]}
                         contentType={urlsType[currentIndex]}
+                        updateCache={updateTimestamp}
                     />
                 {:else}
                     <div
@@ -227,13 +232,15 @@
     <ul class="space-y-2 max-h-96 overflow-y-auto pr-1">
         {#key initTimestamp}
             {#each urls as url, i}
-                <ListPart
-                    contentUrl={url}
-                    contentType={urlsType[i]}
-                    index={i}
-                    isActive={i === currentIndex}
-                    onclick={() => play(i)}
-                />
+                {#key currentIndex === i && updatedTimestamp}
+                    <ListPart
+                        contentUrl={url}
+                        contentType={urlsType[i]}
+                        index={i}
+                        isActive={i === currentIndex}
+                        onclick={() => play(i)}
+                    />
+                {/key}
             {/each}
         {/key}
     </ul>
