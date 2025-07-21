@@ -103,7 +103,6 @@
             ) {
                 rawUrls = shared;
             } else {
-                console.log(shared);
                 const userData = localStorage.getItem("userData");
                 if (userData) rawUrls = userData;
             }
