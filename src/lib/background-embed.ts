@@ -37,7 +37,7 @@ export const onEnded = (callback: () => void) => {
 
 const youTubeVolume = 64;
 const nicovideoVolume = 96;
-let soundCloudVolume = 32;
+let soundCloudVolume = 48;
 // スマホ版の音量調整
 if (globalThis?.window && globalThis.window.innerWidth < 768) {
 	soundCloudVolume = 64;
