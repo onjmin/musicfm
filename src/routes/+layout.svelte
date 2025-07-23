@@ -42,8 +42,8 @@
 		class="bg-zinc-900 shadow-md fixed top-0 left-0 right-0 z-50 h-12 flex items-center justify-center"
 	>
 		<div class="flex items-center space-x-2">
-			<img src="{base}/zero.png" alt="アイコン" class="w-12 h-12" />
 			<h1 class="text-xl font-bold">🎶 おぉんがくぷれぃやああ 🎶</h1>
+			<img src="{base}/zero.png" alt="アイコン" class="w-12 h-12" />
 		</div>
 	</header>
 
