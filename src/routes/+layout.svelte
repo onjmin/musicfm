@@ -3,7 +3,7 @@
 	import { base } from "$app/paths";
 	let { children } = $props();
 
-	const title = "Music FM";
+	const title = "MusicFM";
 	const description = "君だけのプレイリストを友達と共有しよう";
 </script>
 
