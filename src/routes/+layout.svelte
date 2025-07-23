@@ -39,9 +39,12 @@
 <div class="h-screen flex flex-col bg-zinc-950 text-white overflow-hidden">
 	<!-- ヘッダー（固定） -->
 	<header
-		class="bg-zinc-900 shadow-md px-6 py-4 fixed top-0 left-0 right-0 z-50 text-center"
+		class="bg-zinc-900 shadow-md fixed top-0 left-0 right-0 z-50 h-12 flex items-center justify-center"
 	>
-		<h1 class="text-xl font-bold">🎶 おぉんがくぷれぃやああ 🎶</h1>
+		<div class="flex items-center space-x-2">
+			<img src="{base}/zero.png" alt="アイコン" class="w-12 h-12" />
+			<h1 class="text-xl font-bold">🎶 おぉんがくぷれぃやああ 🎶</h1>
+		</div>
 	</header>
 
 	<!-- メインコンテンツ（スクロール可能） -->

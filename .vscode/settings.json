@@ -6,7 +6,7 @@
 	},
 	"[html]": {
 		"editor.formatOnSave": true,
-		"editor.defaultFormatter": null
+		"editor.defaultFormatter": "vscode.html-language-features"
 	},
 	"editor.codeActionsOnSave": {
 		"quickfix.biome": "explicit",
