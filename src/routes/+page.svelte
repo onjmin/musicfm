@@ -258,7 +258,7 @@
         <textarea
             id="urlInput"
             class="w-full h-32 p-3 bg-zinc-900 text-white rounded-md border border-zinc-700 resize-none"
-            placeholder="例：https://www.youtube.com/watch?v=..."
+            placeholder={`例：${exampleUrls}`}
             onkeyup={() => {
                 localStorage.setItem("userData", rawUrls);
             }}
