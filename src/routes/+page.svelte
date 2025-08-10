@@ -31,6 +31,7 @@
     const updateTimestamp = () => {
         updatedTimestamp = performance.now();
     };
+    let textareaEl: HTMLTextAreaElement | undefined = $state();
 
     let isRepeat = $state(
         globalThis?.localStorage?.getItem("isRepeat") === "on",
@@ -239,6 +240,16 @@
                         index={i}
                         isActive={i === currentIndex}
                         onclick={() => play(i)}
+                        onclickLabel={(id: string | null) => {
+                            if (!id) return;
+                            const target = id;
+                            const start = rawUrls.indexOf(target);
+                            if (start !== -1) {
+                                const end = start + target.length;
+                                textareaEl?.focus();
+                                textareaEl?.setSelectionRange(start, end);
+                            }
+                        }}
                     />
                 {/key}
             {/each}
@@ -263,6 +274,7 @@
                 localStorage.setItem("userData", rawUrls);
             }}
             bind:value={rawUrls}
+            bind:this={textareaEl}
         ></textarea>
     </div>
 

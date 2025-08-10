@@ -45,9 +45,8 @@ export const makeNicovideoEmbedURL = (id: string) =>
 export const makeNicovideoThumbnailURL = (id: string) =>
 	`https://nicovideo.cdn.nimg.jp/thumbnails/${id}/${id}`;
 
-export const parseAudioEmbedSoundCloud = (url: URL): string | null =>
-	encodeURIComponent(url.href);
+export const parseAudioEmbedSoundCloud = (url: URL): string | null => url.href;
 export const makeSoundCloudEmbedURL = (url: string) =>
-	`https://w.soundcloud.com/player/?url=${url}&visual=true`;
+	`https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&visual=true`;
 export const makeSoundCloudThumbnailURL = (id: string) =>
 	"https://logo.clearbit.com/https://soundcloud.com";

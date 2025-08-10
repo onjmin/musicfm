@@ -16,6 +16,7 @@
         index = 0,
         isActive = false,
         onclick = $bindable(),
+        onclickLabel = $bindable(),
     } = $props();
 
     let siteInfo: SiteInfo | null = $state(null);
@@ -27,69 +28,65 @@
     let thumbnail = $state("");
     let title = $state("");
     let author = $state("");
+    let id: string | null = $state(null);
     const tryEmbed = (siteInfo: SiteInfo) => {
         try {
             const url = new URL(contentUrl);
             switch (siteInfo.id) {
                 case 1601: {
-                    const parsed = parseVideoEmbedYouTube(url);
-                    if (parsed) {
+                    id = parseVideoEmbedYouTube(url);
+                    if (id) {
                         const cache =
                             localStorage.getItem(
-                                `YouTube###${parsed}###thumbnail`,
+                                `YouTube###${id}###thumbnail`,
                             ) ?? "";
-                        thumbnail = cache
-                            ? cache
-                            : makeYouTubeThumbnailURL(parsed);
+                        thumbnail = cache ? cache : makeYouTubeThumbnailURL(id);
                         title =
-                            localStorage.getItem(
-                                `YouTube###${parsed}###title`,
-                            ) ?? "";
+                            localStorage.getItem(`YouTube###${id}###title`) ??
+                            "";
                         author =
-                            localStorage.getItem(
-                                `YouTube###${parsed}###author`,
-                            ) ?? "";
+                            localStorage.getItem(`YouTube###${id}###author`) ??
+                            "";
                     }
                     break;
                 }
                 case 1602: {
-                    const parsed = parseVideoEmbedNicovideo(url);
-                    if (parsed) {
+                    id = parseVideoEmbedNicovideo(url);
+                    if (id) {
                         const cache =
                             localStorage.getItem(
-                                `Nicovideo###${parsed}###thumbnail`,
+                                `Nicovideo###${id}###thumbnail`,
                             ) ?? "";
                         thumbnail = cache
                             ? cache
-                            : makeNicovideoThumbnailURL(parsed);
+                            : makeNicovideoThumbnailURL(id);
                         title =
-                            localStorage.getItem(
-                                `Nicovideo###${parsed}###title`,
-                            ) ?? "";
+                            localStorage.getItem(`Nicovideo###${id}###title`) ??
+                            "";
                         author =
                             localStorage.getItem(
-                                `Nicovideo###${parsed}###author`,
+                                `Nicovideo###${id}###author`,
                             ) ?? "";
                     }
                     break;
                 }
                 case 3201: {
-                    const parsed = parseAudioEmbedSoundCloud(url);
-                    if (parsed) {
+                    id = parseAudioEmbedSoundCloud(url);
+                    if (id) {
                         const cache =
                             localStorage.getItem(
-                                `SoundCloud###${parsed}###thumbnail`,
+                                `SoundCloud###${id}###thumbnail`,
                             ) ?? "";
                         thumbnail = cache
                             ? cache
-                            : makeSoundCloudThumbnailURL(parsed);
+                            : makeSoundCloudThumbnailURL(id);
                         title =
                             localStorage.getItem(
-                                `SoundCloud###${parsed}###title`,
+                                `SoundCloud###${id}###title`,
                             ) ?? "";
                         author =
                             localStorage.getItem(
-                                `SoundCloud###${parsed}###author`,
+                                `SoundCloud###${id}###author`,
                             ) ?? "";
                     }
                     break;
@@ -124,6 +121,10 @@
 
     <!-- 行番号ラベル -->
     <span
+        tabindex="0"
+        role="button"
+        onclick={() => onclickLabel(id)}
+        onkeydown={() => {}}
         class="absolute top-0 left-0 h-full w-10 flex items-center justify-center
 		text-white text-xs font-mono font-bold bg-blue-600
 		rounded-r-md z-20 shadow-md"
